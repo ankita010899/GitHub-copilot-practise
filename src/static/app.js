@@ -16,6 +16,7 @@ function loadActivities() {
 
 function renderActivities(activities) {
   const template = document.getElementById("activity-card-template");
+  const participantTemplate = document.getElementById("participant-item-template");
   const activitiesList = document.getElementById("activities-list");
   activitiesList.innerHTML = "";
 
@@ -26,15 +27,47 @@ function renderActivities(activities) {
 
     const participantsList = card.querySelector(".participants-list");
     if (activity.participants && activity.participants.length > 0) {
-      participantsList.innerHTML = activity.participants
-        .map((participant) => `<li>${participant}</li>`)
-        .join("");
+      participantsList.innerHTML = "";
+      activity.participants.forEach((participant) => {
+        const li = participantTemplate.content.cloneNode(true);
+        li.querySelector(".participant-email").textContent = participant;
+        
+        const deleteBtn = li.querySelector(".delete-btn");
+        deleteBtn.addEventListener("click", () => {
+          handleDeleteParticipant(activity.name, participant);
+        });
+        
+        participantsList.appendChild(li);
+      });
     } else {
       participantsList.innerHTML = `<li class="no-participants">No participants yet</li>`;
     }
 
     activitiesList.appendChild(card);
   });
+}
+
+function handleDeleteParticipant(activityName, email) {
+  if (!confirm(`Remove ${email} from ${activityName}?`)) {
+    return;
+  }
+
+  fetch(`/api/activities/${encodeURIComponent(activityName)}/unregister?email=${encodeURIComponent(email)}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to unregister");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      loadActivities();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Failed to remove participant. Please try again.");
+    });
 }
 
 function populateActivitySelect(activities) {
