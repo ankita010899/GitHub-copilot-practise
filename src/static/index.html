@@ -41,6 +41,28 @@
       </section>
     </main>
 
+    <template id="activity-card-template">
+      <div class="activity-card">
+        <h4></h4>
+        <p></p>
+        <div class="participants-section">
+          <h5>Participants:</h5>
+          <ul class="participants-list"></ul>
+        </div>
+      </div>
+    </template>
+
+    <template id="participant-item-template">
+      <li class="participant-item">
+        <span class="participant-email"></span>
+        <button class="delete-btn" aria-label="Remove participant" title="Remove participant">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h12zM10 11v6M14 11v6"></path>
+          </svg>
+        </button>
+      </li>
+    </template>
+
     <footer>
       <p>&copy; 2023 Mergington High School</p>
     </footer>
